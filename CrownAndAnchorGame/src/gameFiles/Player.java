@@ -1,3 +1,4 @@
+package gameFiles;
 
 public class Player {
 	private String name;

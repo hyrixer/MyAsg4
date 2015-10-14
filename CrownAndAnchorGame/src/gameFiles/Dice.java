@@ -1,3 +1,4 @@
+package gameFiles;
 public class Dice {
 			
 	private DiceValue value;
