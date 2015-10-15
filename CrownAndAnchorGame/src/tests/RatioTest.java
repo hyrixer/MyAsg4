@@ -52,10 +52,13 @@ public class RatioTest {
 
 	@Test
 	public void test() {
+		
 		int totalWins = 0;
 		int totalLose = 0;
+		
 		for (int i = 0; i < 100; i++)
         {
+			
         	String name = "Fred";
         	int balance = 100;
         	int limit = 0;
@@ -93,11 +96,13 @@ public class RatioTest {
                 	loseCount++;
                 }
                 
+                
             } //while
 
             System.out.print(String.format("%d turns later.\nEnd Game %d: ", turn, i));
             System.out.println(String.format("%s now has balance %d\n", player.getName(), player.getBalance()));
             System.out.println(String.format("Win count = %d, Lose Count = %d, %.2f \n", winCount, loseCount, (float) winCount/(winCount+loseCount)));
+           
             totalWins += winCount;
             totalLose += loseCount;
             winCount = 0;

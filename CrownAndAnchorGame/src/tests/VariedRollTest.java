@@ -1,12 +1,53 @@
-package gameFiles;
-import java.util.List;
-import java.io.*;
+package tests;
 
-public class Main {
+import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import gameFiles.Dice;
+import gameFiles.DiceValue;
+import gameFiles.Game;
+import gameFiles.Main;
+import gameFiles.Player;
+
+public class VariedRollTest {
+	int spadeCount;
+	int clubCount;
+	int heartCount;
+	int diamondCount;
+	int anchorCount;
+	int crownCount;
 	
-	public static void main(String[] args) throws Exception {
+	@Before
+	public void setUp() throws Exception {
+		spadeCount = 0;
+		clubCount = 0;
+		heartCount = 0;
+		diamondCount = 0;
+		anchorCount = 0;
+		crownCount = 0;
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		spadeCount = 0;
+		clubCount = 0;
+		heartCount = 0;
+		diamondCount = 0;
+		anchorCount = 0;
+		crownCount = 0;
+	}
+
+	@Test
+	public void test() throws Exception {
 		
-	   BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
         Dice d1 = new Dice();
         Dice d2 = new Dice();
@@ -18,6 +59,7 @@ public class Main {
 
         int totalWins = 0;
         int totalLosses = 0;
+        
 
         while (true)
         {
@@ -27,13 +69,13 @@ public class Main {
             for (int i = 0; i < 100; i++)
             {
             	String name = "Fred";
-            	int balance = 100;
+            	int balance = 15;
             	int limit = 0;
                 player = new Player(name, balance);
                 player.setLimit(limit);
                 int bet = 5;
                 
-                float ratio = (float) winCount/(winCount+loseCount);
+                
                 
                 System.out.println(String.format("Start Game %d: ", i));
                 System.out.println(String.format("%s starts with balance %d, limit %d", 
@@ -45,36 +87,40 @@ public class Main {
                     turn++;
                     d1 =  new Dice();
                     d2 =  new Dice();
-                 
                     d3 =  new Dice();
-                                       
+                    game = new Game(d1,d2,d3);   
+                    
+                    
                     
                 	DiceValue pick = DiceValue.getRandom();
                    
-                	if (ratio > 0.42 &&  turn%6 == 1 ) {
-                		if (d1.getValue() == pick) {
-                			d1 = new Dice();
-                		}
-                		if (d2.getValue() == pick) {
-                			d2 = new Dice();
-                		}
-                		if (d3.getValue() == pick) {
-                			d3 = new Dice();
-                		}
-                	}
-                	
-                	if (ratio < 0.41 && turn%7 == 1) {
-                		while (d1.getValue() != pick) {
-                			d1 = new Dice();
-                		}
-                	}
-                	
-                	game = new Game(d1,d2,d3);
                 	System.out.printf("Turn %d: %s bet %d on %s\n",
                 			turn, player.getName(), bet, pick); 
                 	
                 	int winnings = game.playRound(player, pick, bet);
                     cdv = game.getDiceValues();
+                    
+                    for (int j = 0; j < 3; j++) {
+                    	if (cdv.get(j) == DiceValue.SPADE) {
+                    		spadeCount ++;
+                    	}
+                    	if (cdv.get(j) == DiceValue.CLUB) {
+                    		clubCount ++;
+                    	}
+                    	if (cdv.get(j) == DiceValue.DIAMOND) {
+                    		diamondCount ++;
+                    	}
+                    	if (cdv.get(j) == DiceValue.HEART) {
+                    		heartCount ++;
+                    	}
+                    	if (cdv.get(j) == DiceValue.CROWN) {
+                    		crownCount ++;
+                    	}
+                    	if (cdv.get(j) == DiceValue.ANCHOR) {
+                    		anchorCount ++;
+                    	}
+                    	
+                    }
                     
                     System.out.printf("Rolled %s, %s, %s\n",
                     		cdv.get(0), cdv.get(1), cdv.get(2));
@@ -90,25 +136,27 @@ public class Main {
 	                	loseCount++;
                     }
                     
-                    ratio = (float) winCount/(winCount+loseCount);
-                    System.out.println(String.format("ratio is: %.2f", ratio));
                 } //while
 
                 System.out.print(String.format("%d turns later.\nEnd Game %d: ", turn, i));
                 System.out.println(String.format("%s now has balance %d\n", player.getName(), player.getBalance()));
                 
             } //for
-            
+            System.out.println(String.format("Spade Count: %d, Club Count: %d, DiamondCount: %d, HeartCount: %d, CrownCount: %d, AnchorCount: %d", spadeCount, clubCount, diamondCount, heartCount, crownCount, anchorCount));
+
             System.out.println(String.format("Win count = %d, Lose Count = %d, %.2f", winCount, loseCount, (float) winCount/(winCount+loseCount)));
             totalWins += winCount;
             totalLosses += loseCount;
-            
 
             String ans = console.readLine();
             if (ans.equals("q")) break;
+            
         } //while true
         
         System.out.println(String.format("Overall win rate = %.1f%%", (float)(totalWins * 100) / (totalWins + totalLosses)));
+	
+        System.out.println(String.format("Spade Count: %d, Club Count: %d, DiamondCount: %d, HeartCount: %d, CrownCount: %d, AnchorCount: %d", spadeCount, clubCount, diamondCount, heartCount, crownCount, anchorCount));
+		
 	}
 
 }

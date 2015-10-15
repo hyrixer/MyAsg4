@@ -42,10 +42,11 @@ public class Game {
 			}
 		}
 		
-		int winnings = matches * bet; // bet + matches * bet;
+		int winnings = matches * bet;
 		System.out.println(winnings);
 
-		if (matches > 0) {			
+		if (matches > 0) {
+			winnings = bet + matches * bet;
 			player.receiveWinnings(winnings);
 		}
         return winnings;		
